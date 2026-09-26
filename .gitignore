@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+network_data.csv
+scored_data.csv
+alerts.csv
+.env

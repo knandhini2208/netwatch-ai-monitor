@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Netwatch — AI Network Performance Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-dot" id="live-dot"></span>
+    <span class="brand-name">Netwatch</span>
+    <span class="brand-sub">AI network performance monitor</span>
+  </div>
+  <div class="actions">
+    <div class="mode-toggle" id="mode-toggle">
+      <button class="mode-btn active" data-mode="sim">Simulated</button>
+      <button class="mode-btn" data-mode="real">Real (this device)</button>
+    </div>
+    <button id="btn-generate" class="btn btn-secondary">Generate data</button>
+    <button id="btn-analyze" class="btn btn-primary" disabled>Run detection</button>
+    <button id="btn-live" class="btn btn-secondary" disabled>Start live monitoring</button>
+  </div>
+</header>
+
+<section class="status-strip">
+  <div class="stat">
+    <span class="stat-value" id="stat-samples">—</span>
+    <span class="stat-label">samples collected</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="stat-anomalies">—</span>
+    <span class="stat-label">anomalies flagged</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="stat-alerts">—</span>
+    <span class="stat-label">alerts raised</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="stat-model">Idle</span>
+    <span class="stat-label">model state</span>
+  </div>
+</section>
+
+<div class="mode-info" id="mode-info" hidden></div>
+
+<main class="layout">
+
+  <section class="charts-panel" id="charts-panel">
+    <div class="empty-state" id="charts-empty">
+      <p>No data yet.</p>
+      <p class="muted">Click <strong>Generate data</strong> to simulate network traffic, then <strong>Run detection</strong> to analyze it.</p>
+    </div>
+
+    <div class="chart-block" data-metric="latency_ms" hidden>
+      <div class="chart-head">
+        <span class="chart-title">Latency</span>
+        <span class="chart-unit">ms</span>
+      </div>
+      <canvas></canvas>
+    </div>
+
+    <div class="chart-block" data-metric="packet_loss" hidden>
+      <div class="chart-head">
+        <span class="chart-title">Packet loss</span>
+        <span class="chart-unit">%</span>
+      </div>
+      <canvas></canvas>
+    </div>
+
+    <div class="chart-block" data-metric="bandwidth_mbps" hidden>
+      <div class="chart-head">
+        <span class="chart-title">Bandwidth</span>
+        <span class="chart-unit">Mbps</span>
+      </div>
+      <canvas></canvas>
+    </div>
+
+    <div class="chart-block" data-metric="jitter_ms" hidden>
+      <div class="chart-head">
+        <span class="chart-title">Jitter</span>
+        <span class="chart-unit">ms</span>
+      </div>
+      <canvas></canvas>
+    </div>
+
+    <div class="chart-block" data-metric="error_rate" hidden>
+      <div class="chart-head">
+        <span class="chart-title">Error rate</span>
+        <span class="chart-unit">%</span>
+      </div>
+      <canvas></canvas>
+    </div>
+  </section>
+
+  <aside class="alert-feed">
+    <div class="alert-feed-head">
+      <span>Alert feed</span>
+      <span class="muted" id="alert-count"></span>
+    </div>
+    <div class="alert-feed-controls">
+      <select id="severity-filter">
+        <option value="all">All severities</option>
+        <option value="critical">Critical only</option>
+        <option value="medium">Medium only</option>
+        <option value="low">Low only</option>
+      </select>
+      <a id="btn-download" class="btn btn-text disabled" href="/api/alerts/download" download>Download CSV</a>
+    </div>
+    <div class="alert-list" id="alert-list">
+      <div class="empty-state">
+        <p class="muted">Alerts will appear here after detection runs.</p>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<script src="vendor/chart.umd.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

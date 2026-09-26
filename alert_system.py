@@ -97,7 +97,8 @@ def generate_alerts(scored_df, cooldown_periods=3):
         last_alert_index = i
         last_severity = severity
 
-    return pd.DataFrame(alerts)
+    columns = ["timestamp", "severity", "reason", "anomaly_score"]
+    return pd.DataFrame(alerts, columns=columns)
 
 
 if __name__ == "__main__":

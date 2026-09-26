@@ -189,7 +189,14 @@ def api_alerts():
     if not os.path.exists(alerts_csv):
         return jsonify([])
 
-    df = pd.read_csv(alerts_csv, parse_dates=["timestamp"])
+    try:
+        df = pd.read_csv(alerts_csv, parse_dates=["timestamp"])
+    except pd.errors.EmptyDataError:
+        return jsonify([])
+
+    if df.empty:
+        return jsonify([])
+
     df = df.sort_values("timestamp", ascending=False)
     df["timestamp"] = df["timestamp"].dt.strftime("%H:%M:%S")
     return jsonify(df.to_dict(orient="records"))
